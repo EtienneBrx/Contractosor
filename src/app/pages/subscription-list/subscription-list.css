@@ -1,4 +1,5 @@
 .filterForm {
+  display: flex;
   padding: 1rem 2rem;
   border: 1px solid grey;
   border-radius: 0.5rem;

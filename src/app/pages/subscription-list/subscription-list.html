@@ -1,30 +1,33 @@
 <div class="mx-4">
-
   <h1 class="font-bold text-2xl">Contrats</h1>
-  <div class="filterForm">
-    <input type="text" placeholder="Chercher un contrat" [formField]="filterForm.name">
-    <select [formField]="filterForm.type">
-      @for (type of SubscriptionType | keyvalue; track type.key) {
-        <option [value]="type.key">{{ type.value }}</option>
-      }
-    </select>
+  <div class="filterForm mb-2">
+    <input matInput type="text" placeholder="Chercher un contrat" [formField]="filterForm.name"
+           class="mr-2 p-1 border border-slate-400 rounded-md">
+    <div class="flex gap-2">
+      <label for="type">Type: </label>
+      <select [formField]="filterForm.type" id="type">
+        @for (type of SubscriptionType | keyvalue; track type.key) {
+          <option [value]="type.key">{{ type.value }}</option>
+        }
+      </select>
+      <div (click)="resetType()" class="cursor-pointer"> X Effacer</div>
+    </div>
   </div>
-  <div>
-    {{ filterForm.name().value() }}
-    {{ filterForm.type().value() }}
-  </div>
-  <div class="flex flex-col gap-4 w-full justify-center items-center">
-    @defer (when subscriptionList()) {
-      @for (subscription of subscriptionList(); track subscription.id) {
-        <app-subscription-details [subscription]="subscription" [routerLink]="['/client', subscription.clientId]"></app-subscription-details>
+  <div class="flex flex-col gap-4 w-full justify-center items-center lg:w-1/2 m-auto">
+    @if (subscriptionList(); as list) {
+      @for (subscription of list; track subscription.id) {
+        <app-subscription-details [subscription]="subscription"
+                                  [routerLink]="['/client', subscription.clientId]"></app-subscription-details>
       } @empty {
         <p>No contracts to display</p>
       }
-    } @placeholder (minimum 2s) {
-      <div class="w-full h-full bg-slate-500 animate-pulse"></div>
+    } @else {
+      @for (_ of [0, 1, 2, 3, 4]; track $index) {
+        <div class="w-full h-20 rounded-md bg-slate-200 animate-pulse"></div>
+      }
     }
   </div>
   <div class="flex justify-center">
-    <button>Load More</button>
+    <button matButton (click)="loadMore()">Load More</button>
   </div>
 </div>

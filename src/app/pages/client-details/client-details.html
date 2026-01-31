@@ -1,1 +1,17 @@
-<p>client-details works!</p>
+<div class="lg:w-1/2 m-auto">
+  <div class="flex gap-4 items-center w-full mb-4">
+    <div class="px-4 py-2 border rounded-md border-slate-400 hover:bg-slate-200 cursor-pointer" [routerLink]="'/subscriptions'">↩ Retour</div>
+    <div>
+      <h1 class="text-2xl">{{client()?.name}}</h1>
+      <h2>{{client()?.clientId}}</h2>
+    </div>
+  </div>
+  <div class="flex flex-col gap-4">
+    @for (subscription of subscriptionList(); track subscription.id) {
+      <app-subscription-details [subscription]="subscription" [showTitle]="false"></app-subscription-details>
+    } @empty {
+      <p>No contracts to display</p>
+    }
+  </div>
+</div>
+

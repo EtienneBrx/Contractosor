@@ -11,9 +11,11 @@ import subscriptionsData from '../../assets/data/subscriptions.json';
 })
 export class RequestMockService {
 
-  constructor() { }
+  _clients = new Map()
 
-  private parseClients(): Client[]{
+  constructor() {}
+
+  private parseClients(): Client[] {
     return (clientsData as any[]).map(c => ({
       clientId: c.clientId,
       name: c.name,
@@ -39,20 +41,28 @@ export class RequestMockService {
     const endIndex = startIndex + pageSize;
 
     const paginatedClients = this.parseClients().slice(startIndex, endIndex);
-    return of(paginatedClients).pipe(delay(3000));
+    return of(paginatedClients).pipe(delay(500));
   }
 
   getClientById(clientId: string): Observable<Client | undefined> {
-    const foundClient = this.parseClients().find(c => c.clientId === clientId);
-    return of(foundClient).pipe(delay(1500));
+    console.log('client : ' + clientId)
+    if (this._clients.has(clientId)) {
+      console.log('return cache')
+      return of(this._clients.get(clientId));
+    } else {
+      console.log('get client')
+      const foundClient = this.parseClients().find(c => c.clientId === clientId);
+      this._clients.set(clientId, foundClient);
+      return of(foundClient).pipe(delay(500));
+    }
   }
 
-  getSubscriptions(page: number = 1, pageSize: number = 10): Observable<Subscription[]> {
+  getSubscriptions(page: number = 1, pageSize: number = 5): Observable<Subscription[]> {
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
 
     const paginatedSubscriptions = this.parseSubscriptions().slice(startIndex, endIndex);
-    return of(paginatedSubscriptions).pipe(delay(4000));
+    return of(paginatedSubscriptions).pipe(delay(500));
   }
 
   getSubscriptionsByClientId(clientId: string, page: number = 1, pageSize: number = 10): Observable<Subscription[]> {
@@ -61,6 +71,18 @@ export class RequestMockService {
     const endIndex = startIndex + pageSize;
 
     const paginatedSubscriptions = filteredSubscriptions.slice(startIndex, endIndex);
-    return of(paginatedSubscriptions).pipe(delay(2000));
+    return of(paginatedSubscriptions).pipe(delay(500));
+  }
+
+  searchSubscriptions(searchParams: { name?: string, type?: string }): Observable<Subscription[]> {
+    let filteredSubscriptions: Subscription[] = this.parseSubscriptions();
+    if (searchParams.name) {
+      const filteredClients = this.parseClients().filter(client => client.name?.toLowerCase().includes(searchParams.name!.toLowerCase()));
+      filteredSubscriptions = filteredSubscriptions.filter(sub => filteredClients.some(client => client.clientId === sub.clientId));
+    }
+    if (searchParams.type) {
+      filteredSubscriptions = filteredSubscriptions.filter(sub => sub.type?.toLowerCase() === searchParams.type?.toLowerCase());
+    }
+    return of(filteredSubscriptions).pipe(delay(500));
   }
 }
