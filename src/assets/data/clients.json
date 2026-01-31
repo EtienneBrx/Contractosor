@@ -1,0 +1,33 @@
+[
+    {
+        "clientId": "CL-001",
+        "name": "Lefebvre Financement",
+        "tier": "Gold",
+        "country": "FR"
+    }, {
+        "clientId": "CL-002",
+        "name": "Holding Durand",
+        "tier": "Silver",
+        "country": "FR"
+    }, {
+        "clientId": "CL-003",
+        "name": "SNCF Réseau",
+        "tier": "Platinum",
+        "country": "FR"
+    }, {
+        "clientId": "CL-004",
+        "name": "InnoTech SAS",
+        "tier": "Bronze",
+        "country": "LU"
+    }, {
+        "clientId": "CL-005",
+        "name": null,
+        "tier": "Gold",
+        "country": "BE"
+    }, {
+        "clientId": "CL-007",
+        "name": "Global Logistics",
+        "tier": "Silver",
+        "country": "UK"
+    }
+]
