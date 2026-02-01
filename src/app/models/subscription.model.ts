@@ -26,3 +26,10 @@ export interface Subscription {
   validUntil: Date;
   status: SubscriptionStatus;
 }
+
+export function isSubscriptionDateExpired(subscription: Subscription, daysBefore: number = 0): boolean {
+  const subDate = new Date(subscription.validUntil);
+  const todayPlusShift = new Date();
+  todayPlusShift.setDate(new Date().getDate() + daysBefore);
+  return subDate < todayPlusShift;
+}

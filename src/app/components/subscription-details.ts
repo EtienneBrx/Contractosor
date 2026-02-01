@@ -5,12 +5,14 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DatePipe } from '@angular/common';
 import { IsSubscriptionUrgentPipe } from '../pipes/is-urgent.pipe';
 import { Client } from '../models/client.model';
+import { IsSubscriptionActivePipe } from '../pipes/is-active.pipe';
 
 @Component({
   selector: 'app-subscription-details',
   imports: [
     DatePipe,
-    IsSubscriptionUrgentPipe
+    IsSubscriptionUrgentPipe,
+    IsSubscriptionActivePipe
   ],
   template: `
     <div
@@ -23,7 +25,7 @@ import { Client } from '../models/client.model';
         <div>{{ subscription()?.validUntil | date: 'dd/MM/yyyy' }}</div>
       </div>
       <div class="w-[20%] text-right">
-        @if (subscription()?.status === 'VALIDATED') {
+        @if (subscription() | isActive) {
           <span class="p-2 border rounded-md border-b-green-500 text-green-500 bg-green-200">ACTIF</span>
         } @else if (subscription() | isUrgent) {
           <span
